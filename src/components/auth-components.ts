@@ -1,11 +1,20 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  heigt: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 420px;
+  padding: 50px 0px;
+`;
+
+export const SocialButtons = styled.div`
+  height: 100%;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 50px 0px;
 `;
 

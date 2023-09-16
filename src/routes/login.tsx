@@ -3,7 +3,9 @@ import { useState } from "react";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
-import { Error, Form, Input, Switcher, Title, Wrapper } from "../components/auth-components";
+import { Error, Form, Input, SocialButtons, Switcher, Title, Wrapper } from "../components/auth-components";
+import GithubButton from "../components/guthub-btn";
+import GoogleButton from "../components/google-btn";
 
 export default function CreateAccount() {
   const navigate = useNavigate();
@@ -52,6 +54,10 @@ export default function CreateAccount() {
       <Switcher>
         Don't have an account? <Link to="/createAccount">Create one &rarr;</Link>
       </Switcher>
+      <SocialButtons>
+        <GithubButton />
+        <GoogleButton />
+      </SocialButtons>
     </Wrapper>
   );
 }
