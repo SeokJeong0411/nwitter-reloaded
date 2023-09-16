@@ -6,7 +6,7 @@ import Login from "./routes/login";
 import CreateAccount from "./routes/createAccount";
 import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./components/protected-route";
