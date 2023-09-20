@@ -77,8 +77,10 @@ const SaveButton = styled.input`
 `;
 
 const TextArea = styled.textarea`
+  margin: 5px 0px 5px 0px;
   padding: 5px;
-  border-radius: 20px;
+  border-radius: 10px;
+  border-color: #1d9bf0;
   font-size: 16px;
   color: white;
   background-color: black;
@@ -213,14 +215,10 @@ export default function Nweet({ text, crtrNm, crtrId, atchmntUrl, id }: ITweet) 
             </Buttons>
           </Column>
           <Column>
-            {fileUrl ? (
-              <>
-                <AttachFileButton htmlFor={`file_${id}`}>
-                  <Photo src={fileUrl} />
-                </AttachFileButton>
-                <AttachFileInput onChange={onFileChange} id={`file_${id}`} type="file" accept="image/*" />
-              </>
-            ) : null}
+            <AttachFileButton htmlFor={`file_${id}`}>
+              <Photo src={fileUrl ? fileUrl : "/no-image.svg"} />
+            </AttachFileButton>
+            <AttachFileInput onChange={onFileChange} id={`file_${id}`} type="file" accept="image/*" />
           </Column>
         </Form>
       ) : (
