@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { auth, storage } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
+import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
+import { ITweet } from "../components/timeline";
+import Nweet from "../components/nweet";
 
 const Wrapper = styled.div`
   display: flex;
@@ -38,9 +41,44 @@ const Name = styled.span`
   font-size: 22px;
 `;
 
+const Nweets = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+`;
+
 export default function Profile() {
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL);
+  const [nweets, setNweets] = useState<ITweet[]>([]);
+
+  const fetchNweets = async () => {
+    const nweetQuery = query(
+      collection(db, "nweets2"),
+      where("crtrId", "==", user?.uid),
+      orderBy("crtdDt", "desc"),
+      limit(25)
+    );
+    const snapshot = await getDocs(nweetQuery);
+    const nweetArr = snapshot.docs.map((doc) => {
+      const { text, crtdDt, crtrId, crtrNm, atchmntUrl } = doc.data();
+      return {
+        text,
+        crtdDt,
+        crtrId,
+        crtrNm,
+        atchmntUrl,
+        id: doc.id,
+      };
+    });
+
+    setNweets(nweetArr);
+  };
+
+  useEffect(() => {
+    fetchNweets();
+  }, []);
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -72,6 +110,11 @@ export default function Profile() {
       </AvatarUpload>
       <AvatarInput onChange={onAvatarChange} id="avatar" type="file" accept="image/*" />
       <Name>{user?.displayName ?? "Anonymous"}</Name>
+      <Nweets>
+        {nweets.map((nweet) => (
+          <Nweet key={nweet.id} {...nweet}></Nweet>
+        ))}
+      </Nweets>
     </Wrapper>
   );
 }
