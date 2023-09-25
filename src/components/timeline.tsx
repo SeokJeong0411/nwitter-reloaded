@@ -19,6 +19,10 @@ const Wrapper = styled.div`
   gap: 10px;
   flex-direction: column;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default function TimeLine() {

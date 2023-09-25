@@ -3,9 +3,9 @@
 [NomadCoder - Nweet](https://nomadcoders.co/nwitter)
 
 - [x] 2023/09/15 (Fri) : 시작!
-- [ ] 
+- [x] 2023/09/25 (Mon) : 끝!
 
-https://nwitter-dd9c1.web.app
+[Nweeter-reloaded 홈페이지](https://nwitter-dd9c1.web.app)
 
 # React + TypeScript + Vite
 
