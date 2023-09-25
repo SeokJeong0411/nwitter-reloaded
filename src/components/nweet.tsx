@@ -179,13 +179,13 @@ export default function Nweet({ text, crtrNm, crtrId, atchmntUrl, id }: ITweet) 
         alert("Image size must be less than 1MB");
       } else {
         const reader = new FileReader();
-        reader.readAsDataURL(files[0]);
-        reader.onloadend = (finishiedEvent: ProgressEvent<FileReader>) => {
-          console.log(finishiedEvent);
-          if (finishiedEvent) {
-            setFileUrl(finishiedEvent?.currentTarget.result);
+
+        reader.onload = () => {
+          if (typeof reader.result === "string") {
+            setFileUrl(reader.result);
           }
         };
+        reader.readAsDataURL(files[0]);
 
         setFile(files[0]);
       }

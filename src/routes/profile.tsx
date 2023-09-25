@@ -37,8 +37,14 @@ const AvatarInput = styled.input`
   display: none;
 `;
 
+const NameWrapper = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
 const Name = styled.span`
   font-size: 22px;
+  padding: 4px 4px;
 `;
 
 const Nweets = styled.div`
@@ -48,10 +54,34 @@ const Nweets = styled.div`
   gap: 10px;
 `;
 
+const ChangeNameBtn = styled.div`
+  width: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  &.save-name {
+    color: #1d9bf0;
+  }
+`;
+
+const InputName = styled.input`
+  color: white;
+  font-size: 22px;
+  background-color: black;
+  border: 1px solid;
+  border-radius: 5px;
+  &:focus {
+    outline: none;
+    border-color: #1d9bf0;
+  }
+`;
+
 export default function Profile() {
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL);
   const [nweets, setNweets] = useState<ITweet[]>([]);
+  const [name, setName] = useState(user?.displayName || "");
+  const [nameEdit, setNameEdit] = useState(false);
 
   const fetchNweets = async () => {
     const nweetQuery = query(
@@ -97,6 +127,25 @@ export default function Profile() {
     }
   };
 
+  const onClickChangeName = () => {
+    setNameEdit((prev) => !prev);
+  };
+
+  const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const changeName = () => {
+    if (user) {
+      if (!name) {
+        alert("Please fill your Nickname");
+        return;
+      }
+      updateProfile(user, { displayName: name });
+    }
+    setNameEdit((prev) => !prev);
+  };
+
   return (
     <Wrapper>
       <AvatarUpload htmlFor="avatar">
@@ -109,7 +158,47 @@ export default function Profile() {
         )}
       </AvatarUpload>
       <AvatarInput onChange={onAvatarChange} id="avatar" type="file" accept="image/*" />
-      <Name>{user?.displayName ?? "Anonymous"}</Name>
+
+      <NameWrapper>
+        {nameEdit ? (
+          <>
+            <InputName onChange={onChangeName} value={name} />
+            <ChangeNameBtn onClick={changeName} className="save-name">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+            </ChangeNameBtn>
+          </>
+        ) : (
+          <>
+            <Name>{name ?? "Anonymous"}</Name>
+            <ChangeNameBtn onClick={onClickChangeName}>
+              <svg
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                />
+              </svg>
+            </ChangeNameBtn>
+          </>
+        )}
+      </NameWrapper>
+
       <Nweets>
         {nweets.map((nweet) => (
           <Nweet key={nweet.id} {...nweet}></Nweet>
